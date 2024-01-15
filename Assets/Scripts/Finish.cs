@@ -3,25 +3,41 @@ using UnityEngine.SceneManagement;
 
 public class Finish : MonoBehaviour
 {
-    [SerializeField] ParticleSystem finishEffect;
-    [SerializeField] int maxScene = 2;
-    [SerializeField] float delay = 2f;
-    int currentScene;
+    [SerializeField] private ParticleSystem finishEffect;
+    [SerializeField] private int maxScene = 2;
+    [SerializeField] private float delay = 2f;
 
+    private int currentScene;
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         currentScene = SceneManager.GetActiveScene().buildIndex;
 
-        if (other.gameObject.CompareTag("Player") && currentScene < maxScene)
+        if (IsPlayerAndBelowMaxScene(other))
         {
-            finishEffect.Play();
-            GetComponent<AudioSource>().Play();
-            Invoke("LoadFinish", delay);
+            PlayFinishEffect();
+            PlayAudio();
+            Invoke("LoadNextScene", delay);
         }
     }
 
-    void LoadFinish(){
+    private bool IsPlayerAndBelowMaxScene(Collider2D other)
+    {
+        return other.gameObject.CompareTag("Player") && currentScene < maxScene;
+    }
+
+    private void PlayFinishEffect()
+    {
+        finishEffect.Play();
+    }
+
+    private void PlayAudio()
+    {
+        GetComponent<AudioSource>().Play();
+    }
+
+    private void LoadNextScene()
+    {
         SceneManager.LoadScene(currentScene + 1);
     }
 }

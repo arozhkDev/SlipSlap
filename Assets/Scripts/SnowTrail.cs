@@ -4,24 +4,31 @@ using UnityEngine;
 
 public class SnowTrail : MonoBehaviour
 {
-    [SerializeField] ParticleSystem snowTrailEffect;
-    [SerializeField] AudioClip sleddingSFX;
+    [SerializeField] private ParticleSystem snowTrailEffect;
+    [SerializeField] private AudioClip sleddingSFX;
 
-    void OnCollisionEnter2D(Collision2D other)
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             snowTrailEffect.Play();
-            GetComponent<AudioSource>().PlayOneShot(sleddingSFX);
+            audioSource.PlayOneShot(sleddingSFX);
         }
     }
 
-    void OnCollisionExit2D(Collision2D other)
+    private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             snowTrailEffect.Stop();
-            GetComponent<AudioSource>().Stop();
+            audioSource.Stop();
         }
     }
 }

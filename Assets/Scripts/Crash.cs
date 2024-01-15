@@ -3,21 +3,40 @@ using UnityEngine.SceneManagement;
 
 public class Crash : MonoBehaviour
 {
-    [SerializeField] float delay = 1.5f;
-    [SerializeField] ParticleSystem crashEffect;
-    [SerializeField] AudioClip crashSFX;
+    [SerializeField] private float delay = 0.5f;
+    [SerializeField] private ParticleSystem crashEffect;
+    [SerializeField] private AudioClip crashSFX;
 
-    void OnTriggerEnter2D(Collider2D other)
+    private bool isCrashed = false;
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.CompareTag("Ground") && !isCrashed)
         {
-            crashEffect.Play();
-            GetComponent<AudioSource>().PlayOneShot(crashSFX);
+            DisablePlayerControls();
+            PlayCrashEffect();
+            PlayCrashSound();
             Invoke("LoadCrash", delay);
+            isCrashed = true;
         }
     }
 
-    void LoadCrash()
+    private void DisablePlayerControls()
+    {
+        FindObjectOfType<PlayerController>().DisableControls();
+    }
+
+    private void PlayCrashEffect()
+    {
+        crashEffect.Play();
+    }
+
+    private void PlayCrashSound()
+    {
+        GetComponent<AudioSource>().PlayOneShot(crashSFX);
+    }
+
+    private void LoadCrash()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

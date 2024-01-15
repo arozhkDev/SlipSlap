@@ -1,29 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float torqueAmount = 8f;
-    [SerializeField] float boostSpeed = 30f;
-    [SerializeField] float baseSpeed = 15f;
-    Rigidbody2D rb2d;
-    SurfaceEffector2D surfaceEffector2D;
+    [SerializeField] private float torqueAmount = 8f;
+    [SerializeField] private float boostSpeed = 30f;
+    [SerializeField] private float baseSpeed = 15f;
 
-    void Start()
+    private Rigidbody2D rb2d;
+    private SurfaceEffector2D surfaceEffector2D;
+    private bool canMove = true;
+
+    private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         surfaceEffector2D = FindObjectOfType<SurfaceEffector2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        RotatePlayer();
-        MovePlayer();
+        if (canMove)
+        {
+            RotatePlayer();
+            MovePlayer();
+        }
     }
 
-    void MovePlayer()
+    private void MovePlayer()
     {
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -35,12 +37,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void RotatePlayer()
+    public void DisableControls()
+    {
+        canMove = false;
+    }
+
+    private void RotatePlayer()
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             rb2d.AddTorque(torqueAmount);
         }
+
         if (Input.GetKey(KeyCode.RightArrow))
         {
             rb2d.AddTorque(-torqueAmount);
