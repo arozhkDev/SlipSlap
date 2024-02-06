@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +18,7 @@ public class Finish : MonoBehaviour
         {
             PlayFinishEffect();
             PlayAudio();
-            Invoke("LoadNextScene", delay);
+            StartCoroutine(LoadNextLevel());
         }
     }
 
@@ -36,8 +37,17 @@ public class Finish : MonoBehaviour
         GetComponent<AudioSource>().Play();
     }
 
-    private void LoadNextScene()
+     IEnumerator LoadNextLevel()
     {
-        SceneManager.LoadScene(currentScene + 1);
+        yield return new WaitForSecondsRealtime(delay);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }
