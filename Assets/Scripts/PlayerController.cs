@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             surfaceEffector2D.speed = boostSpeed;
         }
@@ -44,12 +44,12 @@ public class PlayerController : MonoBehaviour
 
     private void RotatePlayer()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             rb2d.AddTorque(torqueAmount);
         }
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             rb2d.AddTorque(-torqueAmount);
         }
